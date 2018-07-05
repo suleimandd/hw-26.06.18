@@ -1,0 +1,276 @@
+--Написать такие функции (для многотабличной базы данных BooksDB):
+--1.	Функцию, возвращающую количество книг, у которых не указана категория.
+--create function null_category()
+--returns int 
+--as
+--begin
+--declare @Result int
+--select @Result = sum(Pressrun) from books b where b.id_category is null
+--return @Result
+--end
+
+--select dbo.null_category()
+
+--2.	Функцию, возвращающую количество книг по каждому издательству и по каждой из тематик.
+--create function Book_amount()
+--returns table 
+--as
+--return
+--select p.name press_name, t.name themes, sum(b.Pressrun) amount
+--from books b, press p, themes t
+--where b.Id_theme = t.id and b.Id_press = p.id
+--group by t.name, p.name
+--go
+
+--select * from dbo.Book_amount()
+
+--3.	Функцию, возвращающую список книг, отвечающих набору критериев (например, название книги, тематика, категория, издательство), 
+--		и отсортированный по номеру поля, указанному в 5-м параметре, в направлении, указанном в 6-м параметре.
+
+--create function List(@name nvarchar(30), @theme nvarchar(30), 
+--@category nvarchar(30), @press nvarchar(30), @column_number int, @sort_number int) 
+--returns @List table(book_name nvarchar(30), theme_name nvarchar(30), 
+--category_name nvarchar(30), press_name nvarchar(30))
+--as
+--begin 
+--if (@column_number = 1)
+--begin 
+--if (@sort_number = 1)
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by b.Name ASC
+--return
+--end
+--else 
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by b.Name DESC
+--return
+--end
+--end
+
+--else if (@column_number = 2)
+--begin 
+--if (@sort_number = 1)
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by t.name ASC
+--return
+--end
+--else 
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by t.name DESC
+--return
+--end
+--end
+
+--else if (@column_number = 3)
+--begin 
+--if (@sort_number = 1)
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by c.name ASC
+--return
+--end
+--else
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by c.name DESC
+--return
+--end
+--end
+
+--else if (@column_number = 4)
+--begin 
+--if (@sort_number = 1)
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by p.name ASC
+--return
+--end
+--else
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by p.name DESC
+--return
+--end
+--end
+--return
+--end
+
+
+--create function List3(@column_number int, @sort_number int) 
+--returns @L table(book_name nvarchar(30), theme_name nvarchar(30), 
+--category_name nvarchar(30), press_name nvarchar(30))
+--as
+--begin 
+--declare @List table(book_name1 nvarchar(30), theme_name1 nvarchar(30), 
+--category_name1 nvarchar(30), press_name1 nvarchar(30))
+
+--if (@column_number = 1)
+--begin 
+--if (@sort_number = 1)
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by b.Name ASC
+--return
+--end
+--else 
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by b.Name DESC
+--return
+--end
+--end
+
+--else if (@column_number = 2)
+--begin 
+--if (@sort_number = 1)
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by t.name ASC
+--return
+--end
+--else 
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by t.name DESC
+--return
+--end
+--end
+
+--else if (@column_number = 3)
+--begin 
+--if (@sort_number = 1)
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by c.name ASC
+--return
+--end
+--else
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by c.name DESC
+--return
+--end
+--end
+
+--else if (@column_number = 4)
+--begin 
+--if (@sort_number = 1)
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by p.name ASC
+--return
+--end
+--else
+--begin
+--insert @List
+--select b.Name, t.name, c.name, p.name
+--from books b, category c, press p, themes t
+--where b.id_category = c.id and b.Id_press = p.id and b.Id_theme = t.id
+--order by p.name DESC
+--return 
+--end
+--end
+--insert @L
+--select l.book_name1, l.theme_name1, l.category_name1, l.press_name1
+--from @List l 
+--return
+--end
+
+--declare @name nvarchar(30)
+--declare @theme nvarchar(30)
+--declare @category nvarchar(30)
+--declare @press nvarchar(30)
+--declare @column_number int = 4
+--declare @sort_number int = 2 
+--select * from dbo.List3(@column_number, @sort_number)
+--select * from dbo.List3(4, 2)
+--select *from dbo.List(@column_number = 4, @sort_number = 2) 
+
+
+
+--А также реализовать следующие функции:
+--4.	Функцию, возвращающую минимальное из трех переданных параметров.
+--create function Smallest_Number(@a int, @b int, @c int)
+--returns int
+--as
+--begin 
+--declare @Small int = @a
+--if @b < @Small
+--begin 
+--set @Small = @b
+--end
+--if @c < @Small 
+--begin set @Small = @c
+--end
+--return @Small
+--end
+
+--select dbo.Smallest_Number(7, 5, 2)
+
+--5.	Функцию, которая принимает в качестве параметра двухразрядное число и определяет какой из разрядов больше, 
+--		либо они равны (используйте % - деление по модулю. Например, 57%10=7).
+--create function CMP(@a int)
+--returns nvarchar(20)
+--as
+--begin
+--declare @Num_1 int = @a / 10
+--declare @Num_2 int = @a % 10
+--declare @Result nvarchar(20)
+--if (@a < 10) begin set @Result = '@a < 10' end
+--else if (@a > 99) begin set @Result = '@a > 99' end
+--else if (@Num_1 > @Num_2) begin set @Result = '@Num_1 > @Num_2' end
+--else if (@Num_1 < @Num_2) begin set @Result = '@Num_1 < @Num_2' end
+--else begin set @Result = '@Num_1 = @Num_2' end
+--return @Result
+--end
+
+--select dbo.CMP(23) as compare
